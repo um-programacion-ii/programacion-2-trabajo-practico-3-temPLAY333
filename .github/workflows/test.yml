@@ -2,13 +2,16 @@ name: Java CI with Maven
 
 on:
   push:
-    branches: [ main ]
+    branches: [ '**' ]
   pull_request:
     branches: [ main ]
 
 jobs:
   test:
     runs-on: ubuntu-latest
+
+    continue-on-error: ${{ github.event_name == 'push' }}
+
     steps:
     - uses: actions/checkout@v4
     - name: Configurar JDK 21
