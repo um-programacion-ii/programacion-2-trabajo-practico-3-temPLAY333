@@ -1,9 +1,9 @@
 name: Issue de Prog2
 description: Crear un nuevo issue para el trabajo práctico vinculado a un milestone y proyecto
 assignees: [temPLAY333]
-labels: [enhancement]
+labels: [enhancement, test]
 type: "Feature"
-projects: "TrabajoPractico-2"
+projects: [TrabajoPractico-3]
 body:
   - type: markdown
     attributes:
