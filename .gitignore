@@ -1,24 +1,24 @@
-# Compiled class file
+# Archivos y directorios generados por IntelliJ IDEA
+/.idea/
+/*.iml
+/.idea/workspace.xml
+/shelf/
+
+# Directorios de salida
+/out/
+/target/
+target/
+
+# Archivos de configuración específicos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Archivos de compilación
 *.class
 
-# Log file
+# Archivos de logs
 *.log
 
-# BlueJ files
-*.ctxt
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# Package Files #
-*.jar
-*.war
-*.nar
-*.ear
-*.zip
-*.tar.gz
-*.rar
-
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
-replay_pid*
+# Archivos de configuración de Maven
+.mvn/
+.settings/

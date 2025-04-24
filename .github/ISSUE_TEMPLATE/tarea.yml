@@ -1,0 +1,46 @@
+name: Issue de Prog2
+description: Crear un nuevo issue para el trabajo práctico vinculado a un milestone y proyecto
+assignees: [temPLAY333]
+labels: [enhancement, test]
+type: "Feature"
+projects: [TrabajoPractico-3]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ⚠️ **Completa los siguientes campos para registrar este issue correctamente.**  
+
+  - type: input
+    id: objetivo
+    attributes:
+      label: Objetivo
+      description: ¿Qué se busca lograr con este issue?
+      value: Crear la clase [] siguiendo los principios []
+    validations:
+      required: true
+
+  - type: textarea
+    id: detalles
+    attributes:
+      label: Detalles de implementación
+      description: Explicá brevemente los pasos o componentes involucrados.
+      value: |
+        - Crear clase []
+        - Agregar constructor con parámetros, getters y setters
+        - Implementar el metodo []
+        - Hacer los test correspondientes
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist de finalización
+      description: Marcá los puntos que se deben cumplir para dar el issue como terminado
+      options:
+        - label: La funcionalidad está implementada correctamente
+        - label: Se probó la funcionalidad en `Main` o test correspondiente
+        - label: Se creó una rama específica para este issue
+        - label: Se abrió un Pull Request que menciona este Issue
+    validations:
+      required: true
