@@ -24,7 +24,7 @@ jobs:
       run: mkdir -p target/surefire-reports/
 
     - name: Publicar reporte de tests
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: junit-test-results
