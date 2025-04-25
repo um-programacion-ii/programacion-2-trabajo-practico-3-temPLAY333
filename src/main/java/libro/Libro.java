@@ -13,6 +13,17 @@ public class Libro {
         this.estado = EstadoLibro.DISPONIBLE;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Libro libro = (Libro) obj;
+        return ISBN.equals(libro.ISBN) &&
+               titulo.equals(libro.titulo) &&
+               autor.equals(libro.autor) &&
+               estado == libro.estado;
+    }
+
     public String getISBN() {
         return ISBN;
     }

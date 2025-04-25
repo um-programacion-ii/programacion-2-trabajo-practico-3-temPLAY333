@@ -48,7 +48,7 @@ public class LibroServiceTest {
     @ParameterizedTest
     @CsvSource({
             "'', El ISBN no es válido: No puede ser nulo o vacío",
-            "'          ', El ISBN no es válido: No tiene 10 ni 13 dígitos",
+            "'          ', El ISBN no es válido: No puede ser nulo o vacío",
             "123456, El ISBN no es válido: No tiene 10 ni 13 dígitos",
             "123456789A, El ISBN no es válido: Contiene caracteres inválidos"
     })
@@ -124,11 +124,52 @@ public class LibroServiceTest {
         assertEquals(digitoControlEsperado, digitoControl);
     }
 
-    // Grupo de tests para crearLibro
-    @Test
-    void crearLibro_conDatosValidos_creaLibroCorrectamente() {
-        // Test aquí
+    @ParameterizedTest
+    @CsvSource({
+            "'', El título no puede ser nulo o vacío",
+            "'          ', El título no puede ser nulo o vacío"
+    })
+    void verificarTitulo_conTituloInvalido_lanzaExcepcion(String titulo, String mensajeEsperado) {
+        // Act
+        Exception exception = assertThrows(IllegalArgumentException.class, () ->
+                libroService.verificarTitulo(titulo));
+
+        // Assert
+        assertEquals(mensajeEsperado, exception.getMessage());
     }
 
-    // etc...
+    @ParameterizedTest
+    @CsvSource({
+            "'', El autor no puede ser nulo o vacío",
+            "'          ', El autor no puede ser nulo o vacío"
+    })
+    void verificarAutor_conAutorInvalido_lanzaExcepcion(String autor, String mensajeEsperado) {
+        // Act
+        Exception exception = assertThrows(IllegalArgumentException.class, () ->
+                libroService.verificarAutor(autor));
+
+        // Assert
+        assertEquals(mensajeEsperado, exception.getMessage());
+    }
+
+    // Mockear el crearLibro
+    @Test
+    void crearLibro_conISBNValido_creaLibroCorrectamente() {
+        // Arrange
+        String isbn = "978-84-376-0494-7";
+        String titulo = "El título";
+        String autor = "El autor";
+
+        doNothing().when(libroService).verificarISBN(isbn);
+        doNothing().when(libroService).verificarTitulo(titulo);
+        doNothing().when(libroService).verificarAutor(autor);
+
+        // Act
+        libroService.crearLibro(isbn, titulo, autor);
+
+        // Assert
+        verify(libroService).verificarISBN(isbn);
+        verify(libroService).verificarTitulo(titulo);
+        verify(libroService).verificarAutor(autor);
+    }
 }
