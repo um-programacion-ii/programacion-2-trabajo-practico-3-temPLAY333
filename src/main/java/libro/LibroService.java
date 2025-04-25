@@ -39,7 +39,7 @@ public class LibroService {
     }
 
     public String getIsbnLimpio(String ISBN) throws IllegalISBN {
-        String isbnLimpio = ISBN.replaceAll("[-/\\s]", "");
+        String isbnLimpio = ISBN.replaceAll("[-\\s]", "");
 
         if (isbnLimpio.length() != 10 && isbnLimpio.length() != 13) {
             throw new IllegalISBN("No tiene 10 ni 13 dígitos");

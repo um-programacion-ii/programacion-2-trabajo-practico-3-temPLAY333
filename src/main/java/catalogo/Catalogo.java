@@ -22,9 +22,10 @@ public class Catalogo {
     public void agregarLibro(Libro libro) {
         if (libro == null) {
             throw new LibroExcepcion("El libro no puede ser nulo");
-        } else {
-            libros.add(libro);
+        } else if (libros.stream().anyMatch(l -> l.getISBN().equals(libro.getISBN()))) {
+            throw new LibroExcepcion("Ese libro ya existe en el catálogo");
         }
+        libros.add(libro);
     }
 
     public void eliminarLibro(Libro libro) {

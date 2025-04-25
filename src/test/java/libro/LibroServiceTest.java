@@ -67,8 +67,8 @@ public class LibroServiceTest {
             "0-306-40615-2, 0306406152",
             "9780306406157, 9780306406157",
             "0306406152, 0306406152",
-            "978/0/7432/4722/1, 9780743247221",
-            "0/7475/3269/9, 0747532699"
+            "978-0-7432-4722-1, 9780743247221",
+            "0-7475-3269-9, 0747532699"
     })
     void getIsbnLimpio_conISBNValido(String isbn, String isbnLimpioEsperado) {
         String isbnLimpio = libroService.getIsbnLimpio(isbn);
@@ -130,11 +130,9 @@ public class LibroServiceTest {
             "'          ', El título no puede ser nulo o vacío"
     })
     void verificarTitulo_conTituloInvalido_lanzaExcepcion(String titulo, String mensajeEsperado) {
-        // Act
         Exception exception = assertThrows(IllegalArgumentException.class, () ->
                 libroService.verificarTitulo(titulo));
 
-        // Assert
         assertEquals(mensajeEsperado, exception.getMessage());
     }
 
@@ -144,18 +142,15 @@ public class LibroServiceTest {
             "'          ', El autor no puede ser nulo o vacío"
     })
     void verificarAutor_conAutorInvalido_lanzaExcepcion(String autor, String mensajeEsperado) {
-        // Act
-        Exception exception = assertThrows(IllegalArgumentException.class, () ->
+       Exception exception = assertThrows(IllegalArgumentException.class, () ->
                 libroService.verificarAutor(autor));
 
-        // Assert
-        assertEquals(mensajeEsperado, exception.getMessage());
+       assertEquals(mensajeEsperado, exception.getMessage());
     }
 
     // Mockear el crearLibro
     @Test
     void crearLibro_conISBNValido_creaLibroCorrectamente() {
-        // Arrange
         String isbn = "978-84-376-0494-7";
         String titulo = "El título";
         String autor = "El autor";
@@ -164,10 +159,8 @@ public class LibroServiceTest {
         doNothing().when(libroService).verificarTitulo(titulo);
         doNothing().when(libroService).verificarAutor(autor);
 
-        // Act
         libroService.crearLibro(isbn, titulo, autor);
 
-        // Assert
         verify(libroService).verificarISBN(isbn);
         verify(libroService).verificarTitulo(titulo);
         verify(libroService).verificarAutor(autor);

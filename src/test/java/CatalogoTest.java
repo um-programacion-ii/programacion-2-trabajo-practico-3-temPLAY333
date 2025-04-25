@@ -22,9 +22,9 @@ public class CatalogoTest {
         catalogo = Catalogo.getInstance();
         ArrayList<Libro> libros = new ArrayList<>();
 
-        Libro libro1 = new Libro("El Quijote", "Miguel de Cervantes", "1-123-45678-9X");
-        Libro libro2 = new Libro("Cien años de soledad", "Gabriel García Márquez", "9-876-54321-0");
-        Libro libro3 = new Libro("1984", "George Orwell", "0-123-45678-9");
+        Libro libro1 = new Libro("1-123-45678-9X", "El Quijote", "Miguel de Cervantes");
+        Libro libro2 = new Libro("9-876-54321-0", "Cien años de soledad", "Gabriel García Márquez");
+        Libro libro3 = new Libro("0-123-45678-9", "1984", "George Orwell");
 
         libros.add(libro1);
         libros.add(libro2);
@@ -36,8 +36,8 @@ public class CatalogoTest {
 
     @ParameterizedTest
     @MethodSource("provideLibros")
-    public void testAgregarLibro_ConLibrosValidos_AgregarCorrectamente(String titulo, String autor, String ISBN) {
-        Libro libro = new Libro(titulo, autor, ISBN);
+    public void testAgregarLibro_ConLibrosValidos_AgregarCorrectamente(String ISBN, String titulo, String autor) {
+        Libro libro = new Libro(ISBN + "1", titulo, autor);
 
         catalogo.agregarLibro(libro);
 
@@ -45,15 +45,24 @@ public class CatalogoTest {
         assertEquals(4, catalogo.getLibros().size());
     }
 
-    @Test
+    @ParameterizedTest
+    @MethodSource("provideLibros")
+    public void testAgregarLibro_ConLibroExistente_LanzaExcepcion(String ISBN, String titulo, String autor) {
+        Libro libro = new Libro(ISBN, titulo, autor);
+
+        assertThrows(LibroExcepcion.class, () -> catalogo.agregarLibro(libro));
+        assertEquals(3, catalogo.getLibros().size());
+    }
+
+        @Test
     public void testAgregarLibro_ConLibroNulo_LanzaExcepcion() {
         assertThrows(LibroExcepcion.class, () -> catalogo.agregarLibro(null));
     }
 
     @ParameterizedTest
     @MethodSource("provideLibros")
-    public void testEliminarLibro_LibroExistente_EliminaCorrectamente(String titulo, String autor, String ISBN) {
-        Libro libro = new Libro(titulo, autor, ISBN);
+    public void testEliminarLibro_LibroExistente_EliminaCorrectamente(String ISBN, String titulo, String autor) {
+        Libro libro = new Libro(ISBN, titulo, autor);
          
         catalogo.eliminarLibro(libro);
 
@@ -63,8 +72,8 @@ public class CatalogoTest {
     
     @ParameterizedTest
     @MethodSource("provideLibros")
-    public void testEliminarLibro_LibroNoExistente_LanzaExcepcion(String titulo, String autor, String ISBN) {
-        Libro libro = new Libro(titulo, autor, ISBN);
+    public void testEliminarLibro_LibroNoExistente_LanzaExcepcion(String ISBN, String titulo, String autor) {
+        Libro libro = new Libro(ISBN, titulo + "s", autor);
 
         assertThrows(LibroExcepcion.class, () -> catalogo.eliminarLibro(libro));
     }
@@ -76,8 +85,8 @@ public class CatalogoTest {
 
     @ParameterizedTest
     @MethodSource("provideLibros")
-    public void testBuscarLibroPorTitulo_TituloExistente_DevuelveLibro(String titulo, String autor, String ISBN) {
-        Libro libro = new Libro(titulo, autor, ISBN);
+    public void testBuscarLibroPorTitulo_TituloExistente_DevuelveLibro(String ISBN, String titulo, String autor) {
+        Libro libro = new Libro(ISBN, titulo, autor);
          
         Libro encontrado = catalogo.buscarLibroPorTitulo(titulo);
 
@@ -92,8 +101,8 @@ public class CatalogoTest {
 
     @ParameterizedTest
     @MethodSource("provideLibros")
-    public void testBuscarLibroPorISBN_ISBNExistente_DevuelveLibro(String titulo, String autor, String ISBN) {
-        Libro libro = new Libro(titulo, autor, ISBN);
+    public void testBuscarLibroPorISBN_ISBNExistente_DevuelveLibro(String ISBN, String titulo, String autor) {
+        Libro libro = new Libro(ISBN, titulo, autor);
          
         Libro encontrado = catalogo.buscarLibroPorISBN(ISBN);
 
@@ -108,8 +117,8 @@ public class CatalogoTest {
 
     @ParameterizedTest
     @MethodSource("provideLibros")
-    public void testBuscarLibroPorAutor_AutorExistente_DevuelveLibro(String titulo, String autor, String ISBN) {
-        Libro libro = new Libro(titulo, autor, ISBN);
+    public void testBuscarLibroPorAutor_AutorExistente_DevuelveLibro(String ISBN, String titulo, String autor) {
+        Libro libro = new Libro(ISBN, titulo, autor);
          
         Libro encontrado = catalogo.buscarLibroPorAutor(autor);
 
@@ -125,9 +134,9 @@ public class CatalogoTest {
 
     private static Stream<Arguments> provideLibros() {
         return Stream.of(
-            Arguments.of("El Quijote", "Miguel de Cervantes", "1-123-45678-9X"),
-            Arguments.of("Cien años de soledad", "Gabriel García Márquez", "9-876-54321-0"),
-            Arguments.of("1984", "George Orwell", "0-123-45678-9")
+            Arguments.of("1-123-45678-9X", "El Quijote", "Miguel de Cervantes"),
+            Arguments.of("9-876-54321-0", "Cien años de soledad", "Gabriel García Márquez"),
+            Arguments.of("0-123-45678-9", "1984", "George Orwell")
         );
     }
 }

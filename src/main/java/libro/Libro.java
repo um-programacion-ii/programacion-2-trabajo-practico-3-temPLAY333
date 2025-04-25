@@ -18,10 +18,10 @@ public class Libro {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         Libro libro = (Libro) obj;
-        return ISBN.equals(libro.ISBN) &&
-               titulo.equals(libro.titulo) &&
-               autor.equals(libro.autor) &&
-               estado == libro.estado;
+        return this.ISBN.equals(libro.ISBN) &&
+                this.titulo.equals(libro.titulo) &&
+                this.autor.equals(libro.autor) &&
+                this.estado == libro.estado;
     }
 
     public String getISBN() {
