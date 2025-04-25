@@ -16,17 +16,18 @@ public class LibroService {
         return instance;
     }
 
-    public void crearLibro(String ISBN, String titulo, String autor) {
+    public Libro crearLibro(String ISBN, String titulo, String autor) {
         this.verificarISBN(ISBN);
         this.verificarTitulo(titulo);
         this.verificarAutor(autor);
         // Crear el libro
         Libro libro = new Libro(ISBN, titulo, autor);
+        return libro;
     }
 
     public void verificarISBN(String ISBN) throws IllegalISBN {
         // Verificar si el ISBN es válido
-        if (ISBN == null || ISBN.isEmpty()) {
+        if (ISBN == null || ISBN.trim().isEmpty()) {
             throw new IllegalISBN("No puede ser nulo o vacío");
         }
 
@@ -38,7 +39,7 @@ public class LibroService {
     }
 
     public String getIsbnLimpio(String ISBN) throws IllegalISBN {
-        String isbnLimpio = ISBN.replaceAll("[-/\\s]", "");
+        String isbnLimpio = ISBN.replaceAll("[-\\s]", "");
 
         if (isbnLimpio.length() != 10 && isbnLimpio.length() != 13) {
             throw new IllegalISBN("No tiene 10 ni 13 dígitos");
@@ -78,32 +79,15 @@ public class LibroService {
 
     public void verificarTitulo(String titulo) {
         // Verificar si el título es válido
-        if (titulo == null || titulo.isEmpty()) {
+        if (titulo == null || titulo.trim().isEmpty()) {
             throw new IllegalArgumentException("El título no puede ser nulo o vacío");
         }
     }
 
     public void verificarAutor(String autor) {
         // Verificar si el autor es válido
-        if (autor == null || autor.isEmpty()) {
+        if (autor == null || autor.trim().isEmpty()) {
             throw new IllegalArgumentException("El autor no puede ser nulo o vacío");
         }
-    }
-
-    public void agregarLibro(Libro libro) {
-        // Para cuando este el catalogo
-    }
-
-    public void eliminarLibro(String ISBN) {
-        // Para cuando este el catalogo
-    }
-
-    public void modificarLibro(Libro libro) {
-        // Para cuando este el catalogo
-    }
-
-    public Libro buscarLibro(String ISBN) {
-        // Para cuando este el catalogo
-        return null;
     }
 }

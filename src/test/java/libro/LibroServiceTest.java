@@ -48,7 +48,7 @@ public class LibroServiceTest {
     @ParameterizedTest
     @CsvSource({
             "'', El ISBN no es válido: No puede ser nulo o vacío",
-            "'          ', El ISBN no es válido: No tiene 10 ni 13 dígitos",
+            "'          ', El ISBN no es válido: No puede ser nulo o vacío",
             "123456, El ISBN no es válido: No tiene 10 ni 13 dígitos",
             "123456789A, El ISBN no es válido: Contiene caracteres inválidos"
     })
@@ -67,8 +67,8 @@ public class LibroServiceTest {
             "0-306-40615-2, 0306406152",
             "9780306406157, 9780306406157",
             "0306406152, 0306406152",
-            "978/0/7432/4722/1, 9780743247221",
-            "0/7475/3269/9, 0747532699"
+            "978-0-7432-4722-1, 9780743247221",
+            "0-7475-3269-9, 0747532699"
     })
     void getIsbnLimpio_conISBNValido(String isbn, String isbnLimpioEsperado) {
         String isbnLimpio = libroService.getIsbnLimpio(isbn);
@@ -124,11 +124,45 @@ public class LibroServiceTest {
         assertEquals(digitoControlEsperado, digitoControl);
     }
 
-    // Grupo de tests para crearLibro
-    @Test
-    void crearLibro_conDatosValidos_creaLibroCorrectamente() {
-        // Test aquí
+    @ParameterizedTest
+    @CsvSource({
+            "'', El título no puede ser nulo o vacío",
+            "'          ', El título no puede ser nulo o vacío"
+    })
+    void verificarTitulo_conTituloInvalido_lanzaExcepcion(String titulo, String mensajeEsperado) {
+        Exception exception = assertThrows(IllegalArgumentException.class, () ->
+                libroService.verificarTitulo(titulo));
+
+        assertEquals(mensajeEsperado, exception.getMessage());
     }
 
-    // etc...
+    @ParameterizedTest
+    @CsvSource({
+            "'', El autor no puede ser nulo o vacío",
+            "'          ', El autor no puede ser nulo o vacío"
+    })
+    void verificarAutor_conAutorInvalido_lanzaExcepcion(String autor, String mensajeEsperado) {
+       Exception exception = assertThrows(IllegalArgumentException.class, () ->
+                libroService.verificarAutor(autor));
+
+       assertEquals(mensajeEsperado, exception.getMessage());
+    }
+
+    // Mockear el crearLibro
+    @Test
+    void crearLibro_conISBNValido_creaLibroCorrectamente() {
+        String isbn = "978-84-376-0494-7";
+        String titulo = "El título";
+        String autor = "El autor";
+
+        doNothing().when(libroService).verificarISBN(isbn);
+        doNothing().when(libroService).verificarTitulo(titulo);
+        doNothing().when(libroService).verificarAutor(autor);
+
+        libroService.crearLibro(isbn, titulo, autor);
+
+        verify(libroService).verificarISBN(isbn);
+        verify(libroService).verificarTitulo(titulo);
+        verify(libroService).verificarAutor(autor);
+    }
 }
