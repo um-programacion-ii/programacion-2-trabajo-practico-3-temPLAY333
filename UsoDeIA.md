@@ -8,9 +8,11 @@ En base a lo estipulado en el README.md del proyecto, se ha decidido documentar 
 - ISBN: Como desconocia el término, use la IA para que me explique que es, su uitlidad y su formato. En la respuesta me paso funciones para validarlo (cosa que pensaba hacer). Asi que, use dicho codigo como base, cambiando algunas cosas para adaptarlo a mi proyecto.
 
 ### Implementación del Catálogo
-- Autocompletado: Se utilizó la IA para autocompletar codigo para funciones sencillas (getters y setters) y strings repetitivos o similares (como el mensaje de error de las Exceptions). En los test, tambies se usó para crear facilmente los libros.
+- Autocompletado: Se utilizó la IA para autocompletar codigo para funciones sencillas (getters y setters) y strings repetitivos o similares (como el mensaje de error de las Exceptions). 
+- Error en la instanciacion de Libros: Se utilizo IA para instancia diversos libros, pero puso los parametros mal (ISBN, Titulo y Autor). En el momento no me di cuenta, cree el resto de test siguiendo ese formato /orden. Cuando corro los tets y me dy cuenta que esta mal. Le pido devuelta a la IA que ponga el formato correcto en todos los test y en todas las instanciaciones de libros.
 
 ### Sistema de Préstamos
+- Autocompletado: Se utilizó la IA para autocompletar codigo para funciones sencillas (getters y setters) y strings repetitivos o similares (como el mensaje de error de las Exceptions). 
 
 
 
