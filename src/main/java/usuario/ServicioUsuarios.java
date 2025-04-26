@@ -1,5 +1,7 @@
 package usuario;
 
+import comun.excepciones.UsuarioExcepcion;
+
 public class ServicioUsuarios {
     private static ServicioUsuarios instance = null;
     private static int idCounter = 1; // Contador para asignar IDs únicos a los usuarios
@@ -16,19 +18,24 @@ public class ServicioUsuarios {
     }
 
     public Usuario crearUsuario(String nombre, String email) {
-        if (nombre == null || nombre.isEmpty()) {
-            throw new IllegalArgumentException("El nombre no puede ser nulo o vacío");
-        }
-        if (email == null || email.isEmpty()) {
-            throw new IllegalArgumentException("El email no puede ser nulo o vacío");
-        }
+        this.verificarNombre(nombre);
+        this.verificarEmail(email);
+
         return new Usuario(idCounter++, nombre, email);
     }
 
-    public Usuario buscarUsuarioPorId(int id) {
-        if (id <= 0) {
-            throw new IllegalArgumentException("ID de usuario inválido");
+    public void verificarNombre(String nombre) throws UsuarioExcepcion {
+        if (nombre == null || nombre.isEmpty()) {
+            throw new UsuarioExcepcion("El nombre no puede estar vacío");
         }
-        return null; // Cambia esto para devolver el usuario encontrado
+    }
+
+    public void verificarEmail(String email) throws UsuarioExcepcion {
+        if (email == null || email.isEmpty()) {
+            throw new UsuarioExcepcion("El email no puede estar vacío");
+        }
+        if (!email.matches("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$")) {
+            throw new UsuarioExcepcion("El email no es válido");
+        }
     }
 }

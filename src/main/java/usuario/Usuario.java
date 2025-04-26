@@ -8,7 +8,7 @@ public class Usuario {
     private int id;
     private String nombre;
     private String email;
-    private ArrayList<Prestamo> historialPrestamos;
+    private final ArrayList<Prestamo> historialPrestamos;
 
     public Usuario(int id, String nombre, String email) {
         this.id = id;
