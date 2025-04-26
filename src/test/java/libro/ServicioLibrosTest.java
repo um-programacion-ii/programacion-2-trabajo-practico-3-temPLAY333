@@ -3,24 +3,19 @@ package libro;
 import comun.excepciones.IllegalISBN;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
-import org.mockito.Spy;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
-public class LibroServiceTest {
-    private LibroService libroService;
+public class ServicioLibrosTest {
+    private ServicioLibros servicioLibros;
 
     @BeforeEach
     void setUp() {
-        libroService = spy(LibroService.getInstance());
+        servicioLibros = spy(ServicioLibros.getInstance());
     }
 
     @ParameterizedTest
@@ -34,15 +29,15 @@ public class LibroServiceTest {
     })
     void verificarISBN_conISBNValido_noLanzaExcepcion(String isbn) {
         // Arrange
-        doReturn("isbnLimpio").when(libroService).getIsbnLimpio(anyString());
-        doReturn(true).when(libroService).validarDigitoControl(anyString());
+        doReturn("isbnLimpio").when(servicioLibros).getIsbnLimpio(anyString());
+        doReturn(true).when(servicioLibros).validarDigitoControl(anyString());
 
         // Act & Assert
-        assertDoesNotThrow(() -> libroService.verificarISBN(isbn));
+        assertDoesNotThrow(() -> servicioLibros.verificarISBN(isbn));
 
         // Verify
-        verify(libroService).getIsbnLimpio(isbn);
-        verify(libroService).validarDigitoControl("isbnLimpio");
+        verify(servicioLibros).getIsbnLimpio(isbn);
+        verify(servicioLibros).validarDigitoControl("isbnLimpio");
     }
 
     @ParameterizedTest
@@ -55,7 +50,7 @@ public class LibroServiceTest {
     void verificarISBN_conISBNInvalido_lanzaExcepcionConMensaje(String isbn, String mensajeEsperado) {
         // Act
         Exception exception = assertThrows(IllegalISBN.class, () ->
-                libroService.verificarISBN(isbn));
+                servicioLibros.verificarISBN(isbn));
 
         // Assert
         assertEquals(mensajeEsperado, exception.getMessage());
@@ -71,7 +66,7 @@ public class LibroServiceTest {
             "0-7475-3269-9, 0747532699"
     })
     void getIsbnLimpio_conISBNValido(String isbn, String isbnLimpioEsperado) {
-        String isbnLimpio = libroService.getIsbnLimpio(isbn);
+        String isbnLimpio = servicioLibros.getIsbnLimpio(isbn);
 
         assertEquals(isbnLimpioEsperado, isbnLimpio);
     }
@@ -85,7 +80,7 @@ public class LibroServiceTest {
     })
     void getIsbnLimpio_conISBNInvalido_lanzaExcepcion(String isbnInvalido, String mensajeEsperado) {
 
-        Exception exception = assertThrows(IllegalISBN.class, () -> libroService.getIsbnLimpio(isbnInvalido));
+        Exception exception = assertThrows(IllegalISBN.class, () -> servicioLibros.getIsbnLimpio(isbnInvalido));
 
         assertEquals(mensajeEsperado, exception.getMessage());
     }
@@ -100,9 +95,9 @@ public class LibroServiceTest {
             "0747532699, true"
     })
     void validarDigitoControl_conISBNValido(String isbn, boolean digitoControlEsperado) {
-        String isbnLimpio = libroService.getIsbnLimpio(isbn);
+        String isbnLimpio = servicioLibros.getIsbnLimpio(isbn);
 
-        boolean digitoControl = libroService.validarDigitoControl(isbnLimpio);
+        boolean digitoControl = servicioLibros.validarDigitoControl(isbnLimpio);
 
         assertEquals(digitoControlEsperado, digitoControl);
     }
@@ -117,9 +112,9 @@ public class LibroServiceTest {
             "0747532690, false"
     })
     void validarDigitoControl_conISBNInvalido(String isbn, boolean digitoControlEsperado) {
-        String isbnLimpio = libroService.getIsbnLimpio(isbn);
+        String isbnLimpio = servicioLibros.getIsbnLimpio(isbn);
 
-        boolean digitoControl = libroService.validarDigitoControl(isbnLimpio);
+        boolean digitoControl = servicioLibros.validarDigitoControl(isbnLimpio);
 
         assertEquals(digitoControlEsperado, digitoControl);
     }
@@ -131,7 +126,7 @@ public class LibroServiceTest {
     })
     void verificarTitulo_conTituloInvalido_lanzaExcepcion(String titulo, String mensajeEsperado) {
         Exception exception = assertThrows(IllegalArgumentException.class, () ->
-                libroService.verificarTitulo(titulo));
+                servicioLibros.verificarTitulo(titulo));
 
         assertEquals(mensajeEsperado, exception.getMessage());
     }
@@ -143,7 +138,7 @@ public class LibroServiceTest {
     })
     void verificarAutor_conAutorInvalido_lanzaExcepcion(String autor, String mensajeEsperado) {
        Exception exception = assertThrows(IllegalArgumentException.class, () ->
-                libroService.verificarAutor(autor));
+                servicioLibros.verificarAutor(autor));
 
        assertEquals(mensajeEsperado, exception.getMessage());
     }
@@ -155,14 +150,14 @@ public class LibroServiceTest {
         String titulo = "El título";
         String autor = "El autor";
 
-        doNothing().when(libroService).verificarISBN(isbn);
-        doNothing().when(libroService).verificarTitulo(titulo);
-        doNothing().when(libroService).verificarAutor(autor);
+        doNothing().when(servicioLibros).verificarISBN(isbn);
+        doNothing().when(servicioLibros).verificarTitulo(titulo);
+        doNothing().when(servicioLibros).verificarAutor(autor);
 
-        libroService.crearLibro(isbn, titulo, autor);
+        servicioLibros.crearLibro(isbn, titulo, autor);
 
-        verify(libroService).verificarISBN(isbn);
-        verify(libroService).verificarTitulo(titulo);
-        verify(libroService).verificarAutor(autor);
+        verify(servicioLibros).verificarISBN(isbn);
+        verify(servicioLibros).verificarTitulo(titulo);
+        verify(servicioLibros).verificarAutor(autor);
     }
 }

@@ -2,16 +2,16 @@ package libro;
 
 import comun.excepciones.IllegalISBN;
 
-public class LibroService {
-    private static LibroService instance = null;
+public class ServicioLibros {
+    private static ServicioLibros instance = null;
 
-    private LibroService() {
+    private ServicioLibros() {
         // Constructor privado para evitar instanciación externa
     }
 
-    public static LibroService getInstance() {
+    public static ServicioLibros getInstance() {
         if (instance == null) {
-            instance = new LibroService();
+            instance = new ServicioLibros();
         }
         return instance;
     }

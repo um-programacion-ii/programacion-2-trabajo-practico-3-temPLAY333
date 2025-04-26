@@ -1,5 +1,5 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/jpLeSJQi)
-# Sistema de Gestión de Biblioteca - Práctica de Testing
+# Sistema de Gestión de BibliotecaSistema - Práctica de Testing
 
 ![Java](https://img.shields.io/badge/Java-21-orange)
 ![JUnit5](https://img.shields.io/badge/JUnit-5.9.2-green)
