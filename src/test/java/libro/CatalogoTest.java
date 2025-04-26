@@ -1,6 +1,6 @@
-import catalogo.Catalogo;
+package libro;
+
 import comun.excepciones.LibroExcepcion;
-import libro.Libro;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

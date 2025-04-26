@@ -1,16 +1,18 @@
 package libro;
 
+import prestamo.Prestamo;
+
 public class Libro {
     private String ISBN;
     private String titulo;
     private String autor;
-    private EstadoLibro estado;
+    private Prestamo estado;
 
     public Libro(String ISBN, String titulo, String autor) {
         this.ISBN = ISBN;
         this.titulo = titulo;
         this.autor = autor;
-        this.estado = EstadoLibro.DISPONIBLE;
+        this.estado = null;
     }
 
     @Override
@@ -48,11 +50,15 @@ public class Libro {
         this.autor = autor;
     }
 
-    public EstadoLibro getEstado() {
+    public Prestamo getEstado() {
         return estado;
     }
 
-    public void setEstado(EstadoLibro estado) {
+    public void setEstado(Prestamo estado) {
         this.estado = estado;
+    }
+
+    public boolean estaDisponible() {
+        return estado == null;
     }
 }

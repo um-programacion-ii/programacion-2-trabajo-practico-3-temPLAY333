@@ -1,7 +1,6 @@
-package catalogo;
+package libro;
 
 import comun.excepciones.LibroExcepcion;
-import libro.Libro;
 
 import java.util.ArrayList;
 
@@ -10,6 +9,7 @@ public class Catalogo {
     private ArrayList<Libro> libros = new ArrayList<>();
 
     private Catalogo() {
+        // Constructor privado para evitar instanciación externa
     }
 
     public static Catalogo getInstance() {
