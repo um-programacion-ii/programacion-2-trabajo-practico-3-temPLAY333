@@ -1,12 +1,10 @@
 package util;
 
 import libro.Libro;
-import org.junit.jupiter.params.provider.Arguments;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static org.mockito.Mockito.mock;
@@ -34,6 +32,15 @@ public class TestContainer {
         }
 
         return mocks.stream();
+    }
+
+    public static ArrayList<Libro> crearLibros() {
+        ArrayList<Libro> libros = new ArrayList<>();
+        for (Object[] datos : LIBROS_DATA) {
+            Libro libro = new Libro((String) datos[0], (String) datos[1], (String) datos[2]);
+            libros.add(libro);
+        }
+        return libros;
     }
 
     // Container de Prestamos

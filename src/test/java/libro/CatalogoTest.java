@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import util.TestContainer;
 
 import java.util.ArrayList;
 
@@ -15,34 +16,33 @@ import static org.mockito.Mockito.*;
 
 public class CatalogoTest {
     private Catalogo catalogo;
-    private ArrayList<Libro> libros;
 
     @BeforeEach
     public void setUp() {
         catalogo = Catalogo.getInstance();
         catalogo.getLibros().clear();
+
+        ArrayList<Libro> libros = TestContainer.crearLibros();
+        catalogo.setLibros(libros);
     }
 
     @ParameterizedTest
     @MethodSource("util.TestContainer#crearLibrosMocks")
     public void testAgregarLibro_ConLibroValido(Libro libro) {
-        catalogo.agregarLibro(libro);
+        when(libro.getISBN()).thenReturn("1234");
 
+        assertTrue(catalogo.agregarLibro(libro));
         assertTrue(catalogo.getLibros().contains(libro));
-        assertEquals(1, catalogo.getLibros().size());
+        assertEquals(4, catalogo.getLibros().size());
     }
 
     @ParameterizedTest
     @MethodSource("util.TestContainer#crearLibrosMocks")
     public void testAgregarLibro_ConLibroExistente(Libro libro) {
-        ArrayList<Libro> libros = new ArrayList<>();
-        libros.add(libro);
-        catalogo.setLibros(libros);
-
         Exception exception = assertThrows(LibroExcepcion.class, () ->
                 catalogo.agregarLibro(libro));
         assertEquals("Ese libro ya existe en el catálogo", exception.getMessage());
-        assertEquals(1, catalogo.getLibros().size());
+        assertEquals(3, catalogo.getLibros().size());
     }
 
     @Test
@@ -50,23 +50,21 @@ public class CatalogoTest {
         Exception exception = assertThrows(LibroExcepcion.class, () ->
                 catalogo.agregarLibro(null));
         assertEquals("El libro no puede ser nulo", exception.getMessage());
-        assertEquals(0, catalogo.getLibros().size());
+        assertEquals(3, catalogo.getLibros().size());
     }
 
     @ParameterizedTest
     @MethodSource("util.TestContainer#crearLibrosMocks")
     public void testEliminarLibro_LibroExistente_EliminaCorrectamente(Libro libro) {
-        catalogo.agregarLibro(libro);
-
-        catalogo.eliminarLibro(libro);
-
+        assertTrue(catalogo.eliminarLibro(libro));
         assertFalse(catalogo.getLibros().contains(libro));
-        assertEquals(0, catalogo.getLibros().size());
     }
 
     @ParameterizedTest
     @MethodSource("util.TestContainer#crearLibrosMocks")
     public void testEliminarLibro_LibroNoExistente(Libro libro) {
+        when(libro.getISBN()).thenReturn("1234");
+
         Exception exception = assertThrows(LibroExcepcion.class, () ->
                 catalogo.eliminarLibro(libro));
         assertEquals("El libro no existe en el catálogo", exception.getMessage());
@@ -77,14 +75,12 @@ public class CatalogoTest {
         Exception exception = assertThrows(LibroExcepcion.class, () ->
                 catalogo.eliminarLibro(null));
         assertEquals("El libro no puede ser nulo", exception.getMessage());
-        assertEquals(0, catalogo.getLibros().size());
+        assertEquals(3, catalogo.getLibros().size());
     }
 
     @ParameterizedTest
     @MethodSource("util.TestContainer#crearLibrosMocks")
     public void testBuscarLibroPorTitulo_TituloExistente_DevuelveLibro(Libro libro) {
-        catalogo.agregarLibro(libro);
-
         Libro encontrado = catalogo.buscarLibroPorTitulo(libro.getTitulo());
 
         assertEquals(libro.getISBN(), encontrado.getISBN());
@@ -103,8 +99,6 @@ public class CatalogoTest {
     @ParameterizedTest
     @MethodSource("util.TestContainer#crearLibrosMocks")
     public void testBuscarLibroPorISBN_ISBNExistente_DevuelveLibro(Libro libro) {
-        catalogo.agregarLibro(libro);
-
         Libro encontrado = catalogo.buscarLibroPorISBN(libro.getISBN());
 
         assertEquals(libro.getISBN(), encontrado.getISBN());
@@ -123,8 +117,6 @@ public class CatalogoTest {
     @ParameterizedTest
     @MethodSource("util.TestContainer#crearLibrosMocks")
     public void testBuscarLibroPorAutor_AutorExistente_DevuelveLibro(Libro libro) {
-        catalogo.agregarLibro(libro);
-
         Libro encontrado = catalogo.buscarLibroPorAutor(libro.getAutor());
 
         assertEquals(libro.getISBN(), encontrado.getISBN());
