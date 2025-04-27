@@ -17,13 +17,10 @@ public class Libro {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
         Libro libro = (Libro) obj;
         return this.ISBN.equals(libro.ISBN) &&
                 this.titulo.equals(libro.titulo) &&
-                this.autor.equals(libro.autor) &&
-                this.estado == libro.estado;
+                this.autor.equals(libro.autor);
     }
 
     public String getISBN() {
