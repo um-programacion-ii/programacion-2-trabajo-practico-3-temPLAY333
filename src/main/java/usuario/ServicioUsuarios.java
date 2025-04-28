@@ -17,7 +17,7 @@ public class ServicioUsuarios {
         return instance;
     }
 
-    public Usuario crearUsuario(String nombre, String email) {
+    public Usuario crearUsuario(String nombre, String email) throws UsuarioExcepcion{
         this.verificarNombre(nombre);
         this.verificarEmail(email);
 

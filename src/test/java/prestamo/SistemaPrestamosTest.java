@@ -34,7 +34,6 @@ public class SistemaPrestamosTest {
 
         Prestamo prestamo = sistemaPrestamos.prestarLibro(libro, usuario);
 
-        // Verificar que el libro y el usuario se han actualizado correctamente
         verify(libro).setEstado(prestamo);
         verify(usuario).agregarPrestamo(prestamo);
         assertEquals(prestamo.getLibro(), libro);

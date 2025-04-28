@@ -13,7 +13,7 @@ En base a lo estipulado en el README.md del proyecto, se ha decidido documentar 
 
 ### Sistema de Préstamos
 - Autocompletado: Se utilizó la IA para autocompletar codigo para funciones sencillas (getters y setters) y strings repetitivos o similares (como el mensaje de error de las Exceptions). 
-- Creacion de Usuario: Al crear la clase Prestamo, cambie bastante la implementacion que tenia pensada. Dentro de esos cambios, la clase Prestamo esta mucho mas conectada a las clases Libro y Usuario. Pero, la clase Usuario no estaba creada todavia (es, por asi decirlo, responsabildiad de la proxima etapa.) Asi que, se utilizo IA para crear la "base" de la clase Usuario, y que esta tenga los atributos y metodos necesarios para que la clase Prestamo funcione. Todo de forma bastante temporal, ya que en la proxima etapa se revisara y corregira.
+- Creacion de Usuario: Al crear la clase Prestamo, cambie bastante la implementacion que tenia pensada. Dentro de esos cambios, la clase Prestamo esta mucho mas conectada a las clases Libro y Usuario. Pero, la clase Usuario no estaba creada todavia (es, por asi decirlo, responsabildiad de la proxima etapa.) Asi que, se utilizo IA para generar la "base" de la clase Usuario, y que esta tenga los atributos y metodos necesarios para que la clase Prestamo funcione. Todo de forma bastante temporal, ya que en la proxima etapa se revisara y corregira.
 
 ### Sistema de Usuarios
 - Autocompletado: Se utilizó la IA para autocompletar codigo para funciones sencillas (getters y setters) y strings repetitivos o similares (como el mensaje de error de las Exceptions).
