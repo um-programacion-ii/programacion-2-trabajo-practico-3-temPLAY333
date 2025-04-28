@@ -48,11 +48,9 @@ public class ServicioLibrosTest {
             "123456789A, El ISBN no es válido: Contiene caracteres inválidos"
     })
     void verificarISBN_conISBNInvalido_lanzaExcepcionConMensaje(String isbn, String mensajeEsperado) {
-        // Act
         Exception exception = assertThrows(IllegalISBN.class, () ->
                 servicioLibros.verificarISBN(isbn));
 
-        // Assert
         assertEquals(mensajeEsperado, exception.getMessage());
     }
 
@@ -79,9 +77,8 @@ public class ServicioLibrosTest {
 
     })
     void getIsbnLimpio_conISBNInvalido_lanzaExcepcion(String isbnInvalido, String mensajeEsperado) {
-
-        Exception exception = assertThrows(IllegalISBN.class, () -> servicioLibros.getIsbnLimpio(isbnInvalido));
-
+        Exception exception = assertThrows(IllegalISBN.class, () ->
+                servicioLibros.getIsbnLimpio(isbnInvalido));
         assertEquals(mensajeEsperado, exception.getMessage());
     }
 
@@ -127,7 +124,6 @@ public class ServicioLibrosTest {
     void verificarTitulo_conTituloInvalido_lanzaExcepcion(String titulo, String mensajeEsperado) {
         Exception exception = assertThrows(IllegalArgumentException.class, () ->
                 servicioLibros.verificarTitulo(titulo));
-
         assertEquals(mensajeEsperado, exception.getMessage());
     }
 
@@ -139,13 +135,12 @@ public class ServicioLibrosTest {
     void verificarAutor_conAutorInvalido_lanzaExcepcion(String autor, String mensajeEsperado) {
        Exception exception = assertThrows(IllegalArgumentException.class, () ->
                 servicioLibros.verificarAutor(autor));
-
        assertEquals(mensajeEsperado, exception.getMessage());
     }
 
     // Mockear el crearLibro
     @Test
-    void crearLibro_conISBNValido_creaLibroCorrectamente() {
+    void creaLibroCorrectamente() {
         String isbn = "978-84-376-0494-7";
         String titulo = "El título";
         String autor = "El autor";

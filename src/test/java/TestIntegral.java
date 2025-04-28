@@ -2,7 +2,7 @@
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TestBasico {
+public class TestIntegral {
 
     @Test
     void pruebaSimple() {

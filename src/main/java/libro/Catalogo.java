@@ -19,23 +19,22 @@ public class Catalogo {
         return instance;
     }
 
-    public void agregarLibro(Libro libro) {
+    public boolean agregarLibro(Libro libro) {
         if (libro == null) {
             throw new LibroExcepcion("El libro no puede ser nulo");
         } else if (libros.stream().anyMatch(l -> l.getISBN().equals(libro.getISBN()))) {
             throw new LibroExcepcion("Ese libro ya existe en el catálogo");
         }
-        libros.add(libro);
+        return libros.add(libro);
     }
 
-    public void eliminarLibro(Libro libro) {
+    public boolean eliminarLibro(Libro libro) {
         if (libro == null) {
             throw new LibroExcepcion("El libro no puede ser nulo");
-        } else if (libros.stream().noneMatch(libro::equals)) {
+        } else if (libros.stream().noneMatch(l -> l.getISBN().equals(libro.getISBN()))) {
             throw new LibroExcepcion("El libro no existe en el catálogo");
-        } else {
-            libros.removeIf(libro::equals);
         }
+        return libros.removeIf(l -> l.getISBN().equals(libro.getISBN()));
     }
 
     public Libro buscarLibroPorTitulo (String titulo) {

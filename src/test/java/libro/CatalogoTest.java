@@ -5,138 +5,130 @@ import comun.excepciones.LibroExcepcion;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import util.TestContainer;
 
 import java.util.ArrayList;
-import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 public class CatalogoTest {
     private Catalogo catalogo;
-    
+
     @BeforeEach
     public void setUp() {
         catalogo = Catalogo.getInstance();
-        ArrayList<Libro> libros = new ArrayList<>();
-
-        Libro libro1 = new Libro("1-123-45678-9X", "El Quijote", "Miguel de Cervantes");
-        Libro libro2 = new Libro("9-876-54321-0", "Cien años de soledad", "Gabriel García Márquez");
-        Libro libro3 = new Libro("0-123-45678-9", "1984", "George Orwell");
-
-        libros.add(libro1);
-        libros.add(libro2);
-        libros.add(libro3);
-
         catalogo.getLibros().clear();
+
+        ArrayList<Libro> libros = TestContainer.crearLibros();
         catalogo.setLibros(libros);
     }
 
     @ParameterizedTest
-    @MethodSource("provideLibros")
-    public void testAgregarLibro_ConLibrosValidos_AgregarCorrectamente(String ISBN, String titulo, String autor) {
-        Libro libro = new Libro(ISBN + "1", titulo, autor);
+    @MethodSource("util.TestContainer#crearLibrosMocks")
+    public void testAgregarLibro_ConLibroValido(Libro libro) {
+        when(libro.getISBN()).thenReturn("1234");
 
-        catalogo.agregarLibro(libro);
-
+        assertTrue(catalogo.agregarLibro(libro));
         assertTrue(catalogo.getLibros().contains(libro));
         assertEquals(4, catalogo.getLibros().size());
     }
 
     @ParameterizedTest
-    @MethodSource("provideLibros")
-    public void testAgregarLibro_ConLibroExistente_LanzaExcepcion(String ISBN, String titulo, String autor) {
-        Libro libro = new Libro(ISBN, titulo, autor);
-
-        assertThrows(LibroExcepcion.class, () -> catalogo.agregarLibro(libro));
+    @MethodSource("util.TestContainer#crearLibrosMocks")
+    public void testAgregarLibro_ConLibroExistente(Libro libro) {
+        Exception exception = assertThrows(LibroExcepcion.class, () ->
+                catalogo.agregarLibro(libro));
+        assertEquals("Ese libro ya existe en el catálogo", exception.getMessage());
         assertEquals(3, catalogo.getLibros().size());
     }
 
-        @Test
-    public void testAgregarLibro_ConLibroNulo_LanzaExcepcion() {
-        assertThrows(LibroExcepcion.class, () -> catalogo.agregarLibro(null));
-    }
-
-    @ParameterizedTest
-    @MethodSource("provideLibros")
-    public void testEliminarLibro_LibroExistente_EliminaCorrectamente(String ISBN, String titulo, String autor) {
-        Libro libro = new Libro(ISBN, titulo, autor);
-         
-        catalogo.eliminarLibro(libro);
-
-        assertFalse(catalogo.getLibros().contains(libro));
-        assertEquals(2, catalogo.getLibros().size());
-    }
-    
-    @ParameterizedTest
-    @MethodSource("provideLibros")
-    public void testEliminarLibro_LibroNoExistente_LanzaExcepcion(String ISBN, String titulo, String autor) {
-        Libro libro = new Libro(ISBN, titulo + "s", autor);
-
-        assertThrows(LibroExcepcion.class, () -> catalogo.eliminarLibro(libro));
-    }
-    
     @Test
-    public void testEliminarLibro_LibroNulo_LanzaExcepcion() {
-        assertThrows(LibroExcepcion.class, () -> catalogo.eliminarLibro(null));
+    public void testAgregarLibro_ConLibroNulo() {
+        Exception exception = assertThrows(LibroExcepcion.class, () ->
+                catalogo.agregarLibro(null));
+        assertEquals("El libro no puede ser nulo", exception.getMessage());
+        assertEquals(3, catalogo.getLibros().size());
     }
 
     @ParameterizedTest
-    @MethodSource("provideLibros")
-    public void testBuscarLibroPorTitulo_TituloExistente_DevuelveLibro(String ISBN, String titulo, String autor) {
-        Libro libro = new Libro(ISBN, titulo, autor);
-         
-        Libro encontrado = catalogo.buscarLibroPorTitulo(titulo);
-
-        assertEquals(libro, encontrado);
+    @MethodSource("util.TestContainer#crearLibrosMocks")
+    public void testEliminarLibro_LibroExistente_EliminaCorrectamente(Libro libro) {
+        assertTrue(catalogo.eliminarLibro(libro));
+        assertFalse(catalogo.getLibros().contains(libro));
     }
-    
+
+    @ParameterizedTest
+    @MethodSource("util.TestContainer#crearLibrosMocks")
+    public void testEliminarLibro_LibroNoExistente(Libro libro) {
+        when(libro.getISBN()).thenReturn("1234");
+
+        Exception exception = assertThrows(LibroExcepcion.class, () ->
+                catalogo.eliminarLibro(libro));
+        assertEquals("El libro no existe en el catálogo", exception.getMessage());
+    }
+
+    @Test
+    public void testEliminarLibro_LibroNulo() {
+        Exception exception = assertThrows(LibroExcepcion.class, () ->
+                catalogo.eliminarLibro(null));
+        assertEquals("El libro no puede ser nulo", exception.getMessage());
+        assertEquals(3, catalogo.getLibros().size());
+    }
+
+    @ParameterizedTest
+    @MethodSource("util.TestContainer#crearLibrosMocks")
+    public void testBuscarLibroPorTitulo_TituloExistente_DevuelveLibro(Libro libro) {
+        Libro encontrado = catalogo.buscarLibroPorTitulo(libro.getTitulo());
+
+        assertEquals(libro.getISBN(), encontrado.getISBN());
+        assertEquals(libro.getTitulo(), encontrado.getTitulo());
+        assertEquals(libro.getAutor(), encontrado.getAutor());
+    }
+
     @ParameterizedTest
     @ValueSource(strings = {"TítuloInexistente", "OtroTítulo"})
-    public void testBuscarLibroPorTitulo_TituloInexistente_LanzaExcepcion(String titulo) {
-        assertThrows(LibroExcepcion.class, () -> catalogo.buscarLibroPorTitulo(titulo));
+    public void testBuscarLibroPorTitulo_TituloInexistente(String titulo) {
+        Exception exception = assertThrows(LibroExcepcion.class, () ->
+                catalogo.buscarLibroPorTitulo(titulo));
+        assertEquals("Un libro con ese titulo no existe en el catálogo", exception.getMessage());
     }
 
     @ParameterizedTest
-    @MethodSource("provideLibros")
-    public void testBuscarLibroPorISBN_ISBNExistente_DevuelveLibro(String ISBN, String titulo, String autor) {
-        Libro libro = new Libro(ISBN, titulo, autor);
-         
-        Libro encontrado = catalogo.buscarLibroPorISBN(ISBN);
+    @MethodSource("util.TestContainer#crearLibrosMocks")
+    public void testBuscarLibroPorISBN_ISBNExistente_DevuelveLibro(Libro libro) {
+        Libro encontrado = catalogo.buscarLibroPorISBN(libro.getISBN());
 
-        assertEquals(libro, encontrado);
+        assertEquals(libro.getISBN(), encontrado.getISBN());
+        assertEquals(libro.getTitulo(), encontrado.getTitulo());
+        assertEquals(libro.getAutor(), encontrado.getAutor());
     }
-    
+
     @ParameterizedTest
     @ValueSource(strings = {"123456789X", "987654321X"})
-    public void testBuscarLibroPorISBN_ISBNInexistente_LanzaExcepcion(String ISBN) {
-        assertThrows(LibroExcepcion.class, () -> catalogo.buscarLibroPorISBN(ISBN));
+    public void testBuscarLibroPorISBN_ISBNInexistente_LanzaExcepcion(String isbn) {
+        Exception exception = assertThrows(LibroExcepcion.class, () ->
+                catalogo.buscarLibroPorISBN(isbn));
+        assertEquals("Un libro con ese ISBN no existe en el catálogo", exception.getMessage());
     }
 
     @ParameterizedTest
-    @MethodSource("provideLibros")
-    public void testBuscarLibroPorAutor_AutorExistente_DevuelveLibro(String ISBN, String titulo, String autor) {
-        Libro libro = new Libro(ISBN, titulo, autor);
-         
-        Libro encontrado = catalogo.buscarLibroPorAutor(autor);
+    @MethodSource("util.TestContainer#crearLibrosMocks")
+    public void testBuscarLibroPorAutor_AutorExistente_DevuelveLibro(Libro libro) {
+        Libro encontrado = catalogo.buscarLibroPorAutor(libro.getAutor());
 
-        assertEquals(libro, encontrado);
+        assertEquals(libro.getISBN(), encontrado.getISBN());
+        assertEquals(libro.getTitulo(), encontrado.getTitulo());
+        assertEquals(libro.getAutor(), encontrado.getAutor());
     }
-    
+
     @ParameterizedTest
     @ValueSource(strings = {"AutorDesconocido", "OtroAutor"})
     public void testBuscarLibroPorAutor_AutorInexistente_LanzaExcepcion(String autor) {
-        assertThrows(LibroExcepcion.class, () -> catalogo.buscarLibroPorAutor(autor));
-    }
-    
-
-    private static Stream<Arguments> provideLibros() {
-        return Stream.of(
-            Arguments.of("1-123-45678-9X", "El Quijote", "Miguel de Cervantes"),
-            Arguments.of("9-876-54321-0", "Cien años de soledad", "Gabriel García Márquez"),
-            Arguments.of("0-123-45678-9", "1984", "George Orwell")
-        );
+        Exception exception = assertThrows(LibroExcepcion.class, () ->
+                catalogo.buscarLibroPorAutor(autor));
+        assertEquals("Un libro con ese autor no existe en el catálogo", exception.getMessage());
     }
 }

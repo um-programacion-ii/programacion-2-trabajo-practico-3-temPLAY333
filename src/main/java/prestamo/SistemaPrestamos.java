@@ -1,15 +1,13 @@
 package prestamo;
 
+import comun.excepciones.PrestamoExcepcion;
 import libro.Libro;
-import libro.Catalogo;
 import usuario.Usuario;
-import usuario.ServicioUsuarios;
 import comun.excepciones.LibroExcepcion;
 
 public class SistemaPrestamos {
     private static SistemaPrestamos instance = null;
-    private static Catalogo catalogo = Catalogo.getInstance();
-    private static ServicioUsuarios usuarioService = ServicioUsuarios.getInstance();
+    private static ServicioPrestamos servicioPrestamos = ServicioPrestamos.getInstance();
 
     private SistemaPrestamos() {
         // Constructor privado para evitar instanciación externa
@@ -22,24 +20,38 @@ public class SistemaPrestamos {
         return instance;
     }
 
-    public void prestarLibro(Libro libro, Usuario usuario) {
-        try {
-            Prestamo prestamo = new Prestamo(libro, usuario);
-
-            libro.setEstado(prestamo);
-            usuario.agregarPrestamo(prestamo);
-
-        } catch (LibroExcepcion e) {
-            System.out.println("Error: " + e.getMessage());
+    public Prestamo prestarLibro(Libro libro, Usuario usuario) {
+        if (libro == null || usuario == null) {
+            throw new PrestamoExcepcion("El libro y el usuario no pueden ser nulos");
         }
+
+        Prestamo prestamo = servicioPrestamos.crearPrestamo(libro, usuario);
+
+        libro.setEstado(prestamo);
+        usuario.agregarPrestamo(prestamo);
+
+        return prestamo;
     }
 
     public void devolverLibro(Libro libro, Usuario usuario) {
-        try {
-            Prestamo prestamo = libro.getEstado();
+        Prestamo prestamo = verificarLibroPrestado(libro);
+        verificarUsuario(usuario, prestamo);
 
-        } catch (LibroExcepcion e) {
-            System.out.println("Error: " + e.getMessage());
+        libro.setEstado(null);
+    }
+
+    private Prestamo verificarLibroPrestado(Libro libro) throws PrestamoExcepcion {
+        if (libro == null || libro.estaDisponible()) {
+            throw new PrestamoExcepcion("El libro no está prestado");
+        }
+        return libro.getEstado();
+    }
+
+    private void verificarUsuario(Usuario usuario, Prestamo prestamo) throws PrestamoExcepcion {
+        if (usuario == null) {
+            throw new PrestamoExcepcion("El usuario es nulo");
+        } else if (!usuario.getPrestamos().contains(prestamo)) {
+            throw new PrestamoExcepcion("El usuario no tiene este préstamo");
         }
     }
 }

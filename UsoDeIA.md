@@ -13,9 +13,11 @@ En base a lo estipulado en el README.md del proyecto, se ha decidido documentar 
 
 ### Sistema de Préstamos
 - Autocompletado: Se utilizó la IA para autocompletar codigo para funciones sencillas (getters y setters) y strings repetitivos o similares (como el mensaje de error de las Exceptions). 
-- Creacion de Usuario: Al crear la clase Prestamo, cambie bastante la implementacion que tenia pensada. Dentro de esos cambios, la clase Prestamo esta mucho mas conectada a las clases Libro y Usuario. Pero, la clase Usuario no estaba creada todavia (es, por asi decirlo, responsabildiad de la proxima etapa.) Asi que, se utilizo IA para crear la "base" de la clase Usuario, y que esta tenga los atributos y metodos necesarios para que la clase Prestamo funcione. Todo de forma bastante temporal, ya que en la proxima etapa se revisara y corregira.
+- Creacion de Usuario: Al crear la clase Prestamo, cambie bastante la implementacion que tenia pensada. Dentro de esos cambios, la clase Prestamo esta mucho mas conectada a las clases Libro y Usuario. Pero, la clase Usuario no estaba creada todavia (es, por asi decirlo, responsabildiad de la proxima etapa.) Asi que, se utilizo IA para generar la "base" de la clase Usuario, y que esta tenga los atributos y metodos necesarios para que la clase Prestamo funcione. Todo de forma bastante temporal, ya que en la proxima etapa se revisara y corregira.
 
 ### Sistema de Usuarios
-
+- Autocompletado: Se utilizó la IA para autocompletar codigo para funciones sencillas (getters y setters) y strings repetitivos o similares (como el mensaje de error de las Exceptions).
+- Correcto uso de mocks: Revisando como hice los otros test para llevar cierta coherencia, me di cuenta que no estaba usando correctamente los mocks. Por lo que, se utilizo IA para corregir el uso de los mocks en los test, tanto de Usuarios, como de Libros y Prestamos (y sus correspondientes servicios)
+- ContainerTest: El punto anterior me llevo a crear una clase Container que se encargue de crear los mocks de los test. En este caso, la IA me ayudo a crear la clase ContainerTest. La idea es que, al ser una clase generica, se pueda usar en todos los test y no tener que repetir el mismo codigo en cada uno de ellos. Tuve muchos problemas y correciones, pero llegue a un punto en el que estoy conforme.
 
 ### Conclusion
