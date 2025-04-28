@@ -79,4 +79,26 @@ public class GestionUsuariosTest {
 
         assertTrue(gestionUsuarios.registroUsuarios.contains(usuario));
     }
+
+    @ParameterizedTest
+    @MethodSource("util.TestContainer#crearLibrosYUsuariosMocks")
+    public void testEliminarUsuario_Correcto(Libro libro, Usuario usuario) {
+        String nombreUsuario = usuario.getNombre();
+
+        when(gestionUsuarios.buscarUsuarioPorNombre(nombreUsuario)).thenReturn(usuario);
+
+        gestionUsuarios.eliminarUsuario(nombreUsuario);
+
+        assertFalse(gestionUsuarios.registroUsuarios.contains(usuario));
+    }
+
+    @ParameterizedTest
+    @MethodSource("util.TestContainer#crearLibrosYUsuariosMocks")
+    public void testEliminarUsuario_UsuarioNoEncontrado(Libro libro, Usuario usuario) {
+        String nombreUsuario = usuario.getNombre() + "no existe";
+
+        Exception exception = assertThrows(UsuarioExcepcion.class,
+                () -> gestionUsuarios.eliminarUsuario(nombreUsuario));
+        assertEquals("Un usuario con ese nombre no existe en el registro", exception.getMessage());
+    }
 }
